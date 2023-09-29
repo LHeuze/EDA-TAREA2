@@ -1,0 +1,27 @@
+[
+{
+  "directory": "F:/EDA/TAREA2EDA/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe   -g -std=gnu++11 -o CMakeFiles\\p.dir\\main.cpp.obj -c F:\\EDA\\TAREA2EDA\\main.cpp",
+  "file": "F:/EDA/TAREA2EDA/main.cpp"
+},
+{
+  "directory": "F:/EDA/TAREA2EDA/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe   -g -std=gnu++11 -o CMakeFiles\\p.dir\\maze.cpp.obj -c F:\\EDA\\TAREA2EDA\\maze.cpp",
+  "file": "F:/EDA/TAREA2EDA/maze.cpp"
+},
+{
+  "directory": "F:/EDA/TAREA2EDA/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe   -g -std=gnu++11 -o CMakeFiles\\p.dir\\node.cpp.obj -c F:\\EDA\\TAREA2EDA\\node.cpp",
+  "file": "F:/EDA/TAREA2EDA/node.cpp"
+},
+{
+  "directory": "F:/EDA/TAREA2EDA/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe   -g -std=gnu++11 -o CMakeFiles\\p.dir\\stack.cpp.obj -c F:\\EDA\\TAREA2EDA\\stack.cpp",
+  "file": "F:/EDA/TAREA2EDA/stack.cpp"
+},
+{
+  "directory": "F:/EDA/TAREA2EDA/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe   -g -std=gnu++11 -o CMakeFiles\\p.dir\\queue.cpp.obj -c F:\\EDA\\TAREA2EDA\\queue.cpp",
+  "file": "F:/EDA/TAREA2EDA/queue.cpp"
+}
+]
