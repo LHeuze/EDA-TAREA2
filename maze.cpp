@@ -132,6 +132,39 @@ void Maze::print(){
 	std::cout << std::endl;
 }
 
+void Maze::printMarked(int** mat){
+	char VISITED = 'x';
+	char LIMIT = '=';
+	std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
+	std::cout << " ";
+	for (int j = 0; j < width; j++){
+		std::cout << LIMIT;
+	}
+	std::cout << " ";
+	std::cout << std::endl;
+	for (int i = 0; i < height; i++){
+		std::cout << "|";
+		for (int j = 0; j < width; j++){
+			if (mat[i][j] == 0) {
+				std::cout << EMPTY;
+		    }
+			else if(mat[i][j] == 2){
+			std::cout << VISITED;
+			} else {
+			std::cout << WALL;
+			}
+		}
+		std::cout << "|";
+		std::cout << std::endl;
+	}
+	std::cout << " ";
+	for (int j = 0; j < width; j++){
+		std::cout << LIMIT;
+	}
+	std::cout << " ";
+	std::cout << std::endl;
+}
+
 
 bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 	eda::Queue queue;
@@ -160,14 +193,11 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 	
 	std::string pos = std::to_string(f1) + std::to_string(c1);
 	queue.push(pos);
-	eda::Node* ptr; 
-	while(!queue.isEmpty()){
-		if (f1 == f2 && c1 == c2) {
-            return true;
-        }
-		ptr = queue.top();
-		pos = ptr->getData();
-
+	int iter = 0;
+	//while(!queue.isEmpty() && pos != (std::to_string(f2)+std::to_string(c2))){
+	while (!queue.isEmpty()) {
+		pos = queue.top()->getData();
+		std::cout<< "pos: [ " << pos[0] << " , " << pos[1]<< "] " << iter <<std::endl;
 		queue.pop();
 		if(marked[int(pos[0]-'0')][int(pos[1]-'0')] != 2){
 			int i = int(pos[0]-'0');
@@ -176,7 +206,6 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 			int dy = 0;
 			int i_next = 0;
 			int j_next = 0;
-			grid[i][j] = 0;
 			shuffle_dir();
 			for(int k = 0; k <  4; k++){
 				if (dir[k] == NORTH){
@@ -197,86 +226,25 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 				}
 				i_next = i + dy;
 				j_next = j + dx;
-				marked[int(pos[0]-'0')][int(pos[1]-'0')] = 2;
-							/*
-							char VISITED = 'x';
-							char LIMIT = '=';
-							std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
-							std::cout << " ";
-							for (int j = 0; j < width; j++){
-								std::cout << LIMIT;
-							}
-							std::cout << " ";
-							std::cout << std::endl;
-							for (int i = 0; i < height; i++){
-								std::cout << "|";
-								for (int j = 0; j < width; j++){
-									if (marked[i][j] == 0) {
-										std::cout << EMPTY;
-									}
-									else if(marked[i][j] == 2){
-										std::cout << VISITED;
-									}
-									else {
-										std::cout << WALL;
-									}
-								}
-								std::cout << "|";
-								std::cout << std::endl;
-							}
-							std::cout << " ";
-							for (int j = 0; j < width; j++){
-								std::cout << LIMIT;
-							}
-							std::cout << " ";
-							std::cout << std::endl;
-							*/
-							
+				marked[int(pos[0]-'0')][int(pos[1]-'0')] = 2;			
 				if (inRange(i_next, j_next) && grid[i_next][j_next] == 0){
 						if(i_next == f2 && j_next == c2){
-							marked[i_next][j_next] = 2;
-							char VISITED = 'x';
-							char LIMIT = '=';
-							std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
-							std::cout << " ";
-							for (int j = 0; j < width; j++){
-								std::cout << LIMIT;
-							}
-							std::cout << " ";
-							std::cout << std::endl;
-							for (int i = 0; i < height; i++){
-								std::cout << "|";
-								for (int j = 0; j < width; j++){
-									if (marked[i][j] == 0) {
-										std::cout << EMPTY;
-									}
-									else if(marked[i][j] == 2){
-										std::cout << VISITED;
-									}
-									else {
-										std::cout << WALL;
-									}
-								}
-								std::cout << "|";
-								std::cout << std::endl;
-							}
-							std::cout << " ";
-							for (int j = 0; j < width; j++){
-								std::cout << LIMIT;
-							}
-							std::cout << " ";
-							std::cout << std::endl;
+							marked[i_next][j_next] = 2;							
+							printMarked(marked);
 							return true;
 						}
 						if(marked[i_next][j_next] != 2){
+							std::cout<< "next: [ " << i_next << " , " << j_next<< "] " << iter <<std::endl;
 							queue.push(std::to_string(i_next)+std::to_string(j_next));
 						}
 
 				}
 			}
 		}
-	
+	iter++;
 	}
+	std::cout <<"iteracion: "<< iter << std::endl;
+	printMarked(marked);
 	return false;
 
 }
