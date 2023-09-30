@@ -3,8 +3,8 @@
 
 using namespace std;
 int main(){
-	maze::Maze laberinto(7,5);
+	maze::Maze laberinto(10,10);
 	laberinto.print();
-	std::cout << laberinto.solve_queue(0,0,7,2);
+	std::cout << laberinto.solve_queue(0,0,8,5);
 	return 0;
 }

@@ -152,10 +152,11 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 		std::cout << "Posicion de inicio invalida, el inicio debe ser en la primera fila"<< std::endl;
 		return false;
 	}
-	if(f2 != height){
+	/*
+	if(f2 != height-1){
 		std::cout << "Posicion de termino invalida, el destino debe ser en la ultima fila"<< std::endl;
 		return false;
-	}
+	}*/
 	
 	std::string pos = std::to_string(f1) + std::to_string(c1);
 	queue.push(pos);
@@ -197,15 +198,74 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 				i_next = i + dy;
 				j_next = j + dx;
 				marked[int(pos[0]-'0')][int(pos[1]-'0')] = 2;
-
-				if (inRange(i_next, j_next) && grid[i_next][j_next] == 0){
-						if(i_next == f2 && j_next == c2){
+							/*
+							char VISITED = 'x';
+							char LIMIT = '=';
+							std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
+							std::cout << " ";
+							for (int j = 0; j < width; j++){
+								std::cout << LIMIT;
+							}
+							std::cout << " ";
+							std::cout << std::endl;
 							for (int i = 0; i < height; i++){
+								std::cout << "|";
 								for (int j = 0; j < width; j++){
-									std::cout << marked[i][j];
+									if (marked[i][j] == 0) {
+										std::cout << EMPTY;
+									}
+									else if(marked[i][j] == 2){
+										std::cout << VISITED;
+									}
+									else {
+										std::cout << WALL;
+									}
 								}
+								std::cout << "|";
 								std::cout << std::endl;
 							}
+							std::cout << " ";
+							for (int j = 0; j < width; j++){
+								std::cout << LIMIT;
+							}
+							std::cout << " ";
+							std::cout << std::endl;
+							*/
+							
+				if (inRange(i_next, j_next) && grid[i_next][j_next] == 0){
+						if(i_next == f2 && j_next == c2){
+							marked[i_next][j_next] = 2;
+							char VISITED = 'x';
+							char LIMIT = '=';
+							std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
+							std::cout << " ";
+							for (int j = 0; j < width; j++){
+								std::cout << LIMIT;
+							}
+							std::cout << " ";
+							std::cout << std::endl;
+							for (int i = 0; i < height; i++){
+								std::cout << "|";
+								for (int j = 0; j < width; j++){
+									if (marked[i][j] == 0) {
+										std::cout << EMPTY;
+									}
+									else if(marked[i][j] == 2){
+										std::cout << VISITED;
+									}
+									else {
+										std::cout << WALL;
+									}
+								}
+								std::cout << "|";
+								std::cout << std::endl;
+							}
+							std::cout << " ";
+							for (int j = 0; j < width; j++){
+								std::cout << LIMIT;
+							}
+							std::cout << " ";
+							std::cout << std::endl;
 							return true;
 						}
 						if(marked[i_next][j_next] != 2){
@@ -215,14 +275,9 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 				}
 			}
 		}
+	
 	}
-	for (int i = 0; i < height; i++){
-		for (int j = 0; j < width; j++){
-			std::cout << marked[i][j];
-		}
-		std::cout << std::endl;
-	}
-	return true;
+	return false;
 
 }
 }
