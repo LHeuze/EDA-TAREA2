@@ -1,7 +1,9 @@
 #include "maze.hpp"
+#include "queue.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+
 
 namespace maze{
 
@@ -28,9 +30,9 @@ void Maze::reset_maze(int h, int w){
 	delete_maze();
 	height = h;
 	width= w;
-	grid = new uchar*[height];
+	grid = new int*[height];
 	for (int i = 0; i < height; i++){
-		grid[i] = new uchar[width];
+		grid[i] = new int[width];
 		for (int j = 0; j < width; j++){
 			grid[i][j] = 1;
 		}
@@ -129,17 +131,98 @@ void Maze::print(){
 	std::cout << " ";
 	std::cout << std::endl;
 }
+
+
 bool Maze::solve_queue(int f1, int c1, int f2, int c2){
+	eda::Queue queue;
+	int ** marked = grid;
+	if(!inRange(f1,c1) || !inRange(f2,c2)){
+		std::cout << "Posición de inicio o termino invalida, esta fuera de alcance."<< std::endl;
+		return false;
+	}
 	if (grid[f1][c1] == 1){
 		std::cout << "Posición de inicio invalida, es un muro."<< std::endl;
 		return false;
 	}
 	if (grid[f2][c2] == 1){
-		std::cout << "Posición de termino invalida, es un muro."<< std::endl;
+		std::cout << "Posición de termino invalida, es un muro." << std::endl;
 		return false;
 	}
+	if(f1 != 0){
+		std::cout << "Posicion de inicio invalida, el inicio debe ser en la primera fila"<< std::endl;
+		return false;
+	}
+	if(f2 != height){
+		std::cout << "Posicion de termino invalida, el destino debe ser en la ultima fila"<< std::endl;
+		return false;
+	}
+	
+	std::string pos = std::to_string(f1) + std::to_string(c1);
+	queue.push(pos);
+	eda::Node* ptr; 
+	while(!queue.isEmpty()){
+		if (f1 == f2 && c1 == c2) {
+            return true;
+        }
+		ptr = queue.top();
+		pos = ptr->getData();
 
+		queue.pop();
+		if(marked[int(pos[0]-'0')][int(pos[1]-'0')] != 2){
+			int i = int(pos[0]-'0');
+			int j = int(pos[1]-'0');
+			int dx  = 0;
+			int dy = 0;
+			int i_next = 0;
+			int j_next = 0;
+			grid[i][j] = 0;
+			shuffle_dir();
+			for(int k = 0; k <  4; k++){
+				if (dir[k] == NORTH){
+					dy = -1;
+					dx = 0;
+				}
+				else if (dir[k] == SOUTH){
+					dy = 1;
+					dx = 0;
+				}
+				else if (dir[k] == EAST){
+					dy = 0;
+					dx = 1;
+				}
+				else if (dir[k] == WEST){
+					dy = 0;
+					dx = -1;
+				}
+				i_next = i + dy;
+				j_next = j + dx;
+				marked[int(pos[0]-'0')][int(pos[1]-'0')] = 2;
 
+				if (inRange(i_next, j_next) && grid[i_next][j_next] == 0){
+						if(i_next == f2 && j_next == c2){
+							for (int i = 0; i < height; i++){
+								for (int j = 0; j < width; j++){
+									std::cout << marked[i][j];
+								}
+								std::cout << std::endl;
+							}
+							return true;
+						}
+						if(marked[i_next][j_next] != 2){
+							queue.push(std::to_string(i_next)+std::to_string(j_next));
+						}
+
+				}
+			}
+		}
+	}
+	for (int i = 0; i < height; i++){
+		for (int j = 0; j < width; j++){
+			std::cout << marked[i][j];
+		}
+		std::cout << std::endl;
+	}
+	return true;
 
 }
 }

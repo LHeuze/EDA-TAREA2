@@ -5,19 +5,20 @@
 
 #ifndef NODE_HPP_
 #define NODE_HPP_
+#include <string>
 
 namespace eda {
 
 class Node {
 private:
-	char data;
+	std::string data;
 	Node* ptrNext;
 public:
-	Node();
-	Node(char _data, Node* next = nullptr);
-	void setData(char _data);
+	//Node();
+	Node(std::string _data, Node* next = nullptr);
+	void setData(std::string _data);
 	void setNext(Node* _next);
-	char getData();
+	std::string getData();
 	Node* getNext();
 	void print();
 	virtual ~Node();

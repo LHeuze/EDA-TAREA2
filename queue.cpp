@@ -14,7 +14,7 @@ Queue::Queue():head(nullptr), tail(nullptr) {
 
 }
 
-void Queue::push(char val){
+void Queue::push(std::string val){
 	Node* node = new Node(val);
 	push(node);
 }

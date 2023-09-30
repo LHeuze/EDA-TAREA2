@@ -18,7 +18,7 @@ private:
 	Node* tail;
 public:
 	Queue();
-	void push(char val);
+	void push(std::string val);
 	void push(Node* node);
 	void pop();
 	Node* top();

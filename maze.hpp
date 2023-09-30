@@ -4,7 +4,7 @@ namespace maze {
 
 	class Maze{
 	private:
-		uchar**  grid;
+		int**  grid;
 		int width;
 		int height;
 		int dir[4];
