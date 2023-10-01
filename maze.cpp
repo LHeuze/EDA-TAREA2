@@ -203,7 +203,6 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 	
 	std::string pos = std::to_string(f1) + "," + std::to_string(c1);
 	queue.push(pos);
-	int iter = 0;
 	while (!queue.isEmpty() && (pos[0]-'0' != f2 || pos[1]-'0' != c2)) {
 		pos = queue.top()->getData();
 		queue.pop();
@@ -239,7 +238,6 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 				}
 				int i_next = i + dy;
 				int j_next = j + dx;
-				std::cout << iter<<" next pos: "<< i <<" + "<< dy<<" , "<< j << " + "<< dx <<  std::endl;
 				marked[i][j] = 2;
 				if (inRange(i_next, j_next) && (grid[i_next][j_next] == 0)){
 							
@@ -250,7 +248,6 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
     						delete[] marked[i];
 						}
 						delete[] marked;
-						std::cout << iter<< std::endl;
 						return true;
 					}
 					
@@ -261,7 +258,6 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 				}
 			}
 		}
-		iter++;
 	}
 	printMarked(marked);
 	for (int i = 0; i < height; i++) {
