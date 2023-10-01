@@ -9,7 +9,7 @@ int main(){
 		cout << "No se pudo resolver el laberinto.";
 	}
 	else{
-		cout << "Else";
+		cout << "Se resolvio con exito el laberinto.";
 	}
 	return 0;
 }
