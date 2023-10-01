@@ -150,7 +150,7 @@ void Maze::printMarked(int** mat){
 		    }
 			else if(mat[i][j] == 2){
 			std::cout << VISITED;
-			} else {
+			} else if(mat[i][j] == 1){
 			std::cout << WALL;
 			}
 		}
@@ -168,7 +168,17 @@ void Maze::printMarked(int** mat){
 
 bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 	eda::Queue queue;
-	int ** marked = grid;
+	int ** marked = new int*[height];
+	for (int i = 0; i < height; i++) {
+    	marked[i] = new int[width];
+    	for (int j = 0; j < width; j++) {
+			if(grid[i][j] == 0){
+        		marked[i][j] = 0;
+			} else{
+				marked[i][j] = 1;
+			}
+    	}
+	}	
 	if(!inRange(f1,c1) || !inRange(f2,c2)){
 		std::cout << "Posición de inicio o termino invalida, esta fuera de alcance."<< std::endl;
 		return false;
@@ -185,27 +195,30 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 		std::cout << "Posicion de inicio invalida, el inicio debe ser en la primera fila"<< std::endl;
 		return false;
 	}
-	/*
+	
 	if(f2 != height-1){
 		std::cout << "Posicion de termino invalida, el destino debe ser en la ultima fila"<< std::endl;
 		return false;
-	}*/
+	}
 	
-	std::string pos = std::to_string(f1) + std::to_string(c1);
+	std::string pos = std::to_string(f1) + "," + std::to_string(c1);
 	queue.push(pos);
 	int iter = 0;
-	//while(!queue.isEmpty() && pos != (std::to_string(f2)+std::to_string(c2))){
-	while (!queue.isEmpty()) {
+	while (!queue.isEmpty() && (pos[0]-'0' != f2 || pos[1]-'0' != c2)) {
 		pos = queue.top()->getData();
-		std::cout<< "pos: [ " << pos[0] << " , " << pos[1]<< "] " << iter <<std::endl;
 		queue.pop();
-		if(marked[int(pos[0]-'0')][int(pos[1]-'0')] != 2){
-			int i = int(pos[0]-'0');
-			int j = int(pos[1]-'0');
-			int dx  = 0;
-			int dy = 0;
-			int i_next = 0;
-			int j_next = 0;
+		int i = 0;
+    	int j = 0;
+    	size_t commaPos = pos.find(',');
+    	if (commaPos != std::string::npos) {
+        	i = std::stoi(pos.substr(0, commaPos));
+        	j = std::stoi(pos.substr(commaPos + 1));
+    	}
+		if(marked[i][j] != 2){
+			//int i = int(pos[0]-'0');
+			//int j = int(pos[1]-'0');
+			int dx;
+			int dy;
 			shuffle_dir();
 			for(int k = 0; k <  4; k++){
 				if (dir[k] == NORTH){
@@ -224,27 +237,38 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 					dy = 0;
 					dx = -1;
 				}
-				i_next = i + dy;
-				j_next = j + dx;
-				marked[int(pos[0]-'0')][int(pos[1]-'0')] = 2;			
-				if (inRange(i_next, j_next) && grid[i_next][j_next] == 0){
-						if(i_next == f2 && j_next == c2){
-							marked[i_next][j_next] = 2;							
-							printMarked(marked);
-							return true;
+				int i_next = i + dy;
+				int j_next = j + dx;
+				std::cout << iter<<" next pos: "<< i <<" + "<< dy<<" , "<< j << " + "<< dx <<  std::endl;
+				marked[i][j] = 2;
+				if (inRange(i_next, j_next) && (grid[i_next][j_next] == 0)){
+							
+					if(i_next == f2 && j_next == c2){
+						marked[i_next][j_next] = 2;							
+						printMarked(marked);
+						for (int i = 0; i < height; i++) {
+    						delete[] marked[i];
 						}
-						if(marked[i_next][j_next] != 2){
-							std::cout<< "next: [ " << i_next << " , " << j_next<< "] " << iter <<std::endl;
-							queue.push(std::to_string(i_next)+std::to_string(j_next));
-						}
+						delete[] marked;
+						std::cout << iter<< std::endl;
+						return true;
+					}
+					
+					if(marked[i_next][j_next] != 2){
+						queue.push(std::to_string(i_next) + "," + std::to_string(j_next));
+					}
 
 				}
 			}
 		}
-	iter++;
+		iter++;
 	}
-	std::cout <<"iteracion: "<< iter << std::endl;
 	printMarked(marked);
+	for (int i = 0; i < height; i++) {
+    	delete[] marked[i];
+	}
+	delete[] marked;
+	
 	return false;
 
 }

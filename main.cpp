@@ -8,5 +8,8 @@ int main(){
 	if(!laberinto.solve_queue(0,0,20,10)){
 		cout << "No se pudo resolver el laberinto.";
 	}
+	else{
+		cout << "Else";
+	}
 	return 0;
 }
