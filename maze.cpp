@@ -1,8 +1,12 @@
 #include "maze.hpp"
 #include "queue.hpp"
+#include "stack.hpp"
+#include "node.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 
 namespace maze{
@@ -150,7 +154,7 @@ void Maze::printMarked(int** mat){
 		    }
 			else if(mat[i][j] == 2){
 			std::cout << VISITED;
-			} else if(mat[i][j] == 1){
+			} else {
 			std::cout << WALL;
 			}
 		}
@@ -268,4 +272,109 @@ bool Maze::solve_queue(int f1, int c1, int f2, int c2){
 	return false;
 
 }
+
+
+
+
+bool Maze::solve_stack(int f1, int c1, int f2, int c2) {
+    eda::Stack stack;
+    int** marked = new int*[height];
+    for (int i = 0; i < height; i++) {
+    	marked[i] = new int[width];
+    	for (int j = 0; j < width; j++) {
+			if(grid[i][j] == 0){
+        		marked[i][j] = 0;
+			} else{
+				marked[i][j] = 1;
+			}
+		}
+	}
+    if (!inRange(f1, c1) || !inRange(f2, c2)) {
+        
+        return false;
+    }
+    if (grid[f1][c1] == 1) {
+        
+        return false;
+    }
+    if (grid[f2][c2] == 1) {
+        
+        return false;
+    }
+    if (f1 != 0) {
+        
+        return false;
+    }
+    std::string pos = std::to_string(f1) +',' + std::to_string(c1);
+    stack.push(new eda::Node(pos));
+    marked[f1][c1] = 2;
+	int iter = 0;
+    while (!stack.isEmpty()) {
+		
+		
+        eda::Node* currentNode = stack.top();
+        pos = currentNode->getData();
+		int i = 0;
+    	int j = 0;
+    	size_t commaPos = pos.find(',');
+    	if (commaPos != std::string::npos) {
+        	i = std::stoi(pos.substr(0, commaPos));
+        	j = std::stoi(pos.substr(commaPos + 1));
+    	}
+        if (i == f2 && j == c2) {
+            // Llegamos al destino, el laberinto tiene solución
+            printMarked(marked);
+            return true;
+        }
+
+        bool found = false;
+		shuffle_dir();
+        for (int k = 0; k < 4; k++) {
+            int dy = 0, dx = 0;
+            if (dir[k] == NORTH) {
+                dy = -1;
+                dx = 0;
+            } else if (dir[k] == SOUTH) {
+                dy = 1;
+                dx = 0;
+            } else if (dir[k] == EAST) {
+                dy = 0;
+                dx = 1;
+            } else if (dir[k] == WEST) {
+                dy = 0;
+                dx = -1;
+            }
+            int i_next = i + dy;
+            int j_next = j + dx;
+            if (inRange(i_next, j_next) ) {
+				if (grid[i_next][j_next] == 1 && marked[i_next][j_next] != 1 ) {
+					// Si la celda es una pared, marcarla como 1
+				
+					marked[i_next][j_next] = 1;
+					} else if (grid[i_next][j_next] == 0 && marked[i_next][j_next] == 0 && marked[i_next][j_next] != 5 ) {
+					marked[i_next][j_next] = 2;
+					stack.push(new eda::Node(std::to_string(i_next) +',' + std::to_string(j_next)));
+					found = true;
+					
+					break;
+					}
+						
+					
+        	}
+        }
+
+        if (!found) {
+            // Si no encontramos un camino válido desde este nodo, lo eliminamos de la pila.
+			//marked[i][j] = 5;
+            stack.pop();
+        }
+	iter++;
+    }
+
+    // Si llegamos aquí, significa que no se encontró una solución
+    printMarked(marked);
+    return false;
+}
+
+
 }

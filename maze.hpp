@@ -24,6 +24,7 @@ namespace maze {
 		bool inRange(int i, int j);
 		void print();
 		bool solve_queue(int,int,int,int);
+		bool solve_stack(int,int,int,int);
 		void printMarked(int**);
 
 	};

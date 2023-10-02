@@ -5,11 +5,9 @@ using namespace std;
 int main(){
 	maze::Maze laberinto(21,21);
 	laberinto.print();
-	if(!laberinto.solve_queue(0,0,20,10)){
-		cout << "No se pudo resolver el laberinto.";
-	}
-	else{
-		cout << "Se resolvio con exito el laberinto.";
-	}
+	cout << "Solucion con cola: "<< endl;
+	laberinto.solve_queue(0,0,20,10);
+	cout << "Solucion con pila: "<< endl;
+	laberinto.solve_stack(0,0,20,10);
 	return 0;
 }
